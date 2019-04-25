@@ -1,0 +1,5 @@
+platform :ios, '11.0'
+
+target 'react_native' do
+  pod 'AppAuth'
+end
