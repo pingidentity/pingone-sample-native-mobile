@@ -32,7 +32,14 @@ typedef void (^OIDServiceConfigurationCreated)
 
 /*! @brief Represents the information needed to construct a @c OIDAuthorizationService.
  */
-@interface OIDServiceConfiguration : NSObject <NSCopying, NSSecureCoding>
+@interface OIDServiceConfiguration : NSObject <NSCopying, NSSecureCoding> {
+  // property variables
+  NSURL *_authorizationEndpoint;
+  NSURL *_tokenEndpoint;
+  NSURL *_issuer;
+  NSURL *_registrationEndpoint;
+  OIDServiceDiscovery *_discoveryDocument;
+}
 
 /*! @brief The authorization endpoint URI.
  */

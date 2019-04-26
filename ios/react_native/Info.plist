@@ -56,5 +56,17 @@
 			</dict>
 		</dict>
 	</dict>
+
+	<key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key>
+      <string>react_native</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>com.example.app</string>
+      </array>
+    </dict>
+  </array>
 </dict>
 </plist>

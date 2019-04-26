@@ -22,6 +22,7 @@
 #import "OIDAuthorizationResponse.h"
 #import "OIDDefines.h"
 #import "OIDErrorUtilities.h"
+#import "OIDAuthorizationFlowSession.h"
 #import "OIDExternalUserAgent.h"
 #import "OIDExternalUserAgentSession.h"
 #import "OIDIDToken.h"
@@ -42,7 +43,17 @@ static NSString *const kOpenIDConfigurationWellKnownPath = @".well-known/openid-
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OIDAuthorizationSession : NSObject<OIDExternalUserAgentSession>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
+@interface OIDAuthorizationFlowSessionImplementation : NSObject<OIDExternalUserAgentSession, OIDAuthorizationFlowSession> {
+  // private variables
+  OIDAuthorizationRequest *_request;
+  id<OIDExternalUserAgent> _externalUserAgent;
+  OIDAuthorizationCallback _pendingauthorizationFlowCallback;
+}
+
+#pragma GCC diagnostic pop
 
 - (instancetype)init NS_UNAVAILABLE;
 
@@ -51,11 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@implementation OIDAuthorizationSession {
-  OIDAuthorizationRequest *_request;
-  id<OIDExternalUserAgent> _externalUserAgent;
-  OIDAuthorizationCallback _pendingauthorizationFlowCallback;
-}
+@implementation OIDAuthorizationFlowSessionImplementation
 
 - (instancetype)initWithRequest:(OIDAuthorizationRequest *)request {
   self = [super init];
@@ -172,9 +179,19 @@ NS_ASSUME_NONNULL_BEGIN
   }
 }
 
+- (void)failAuthorizationFlowWithError:(NSError *)error {
+  [self failExternalUserAgentFlowWithError:error];
+}
+
+- (BOOL)resumeAuthorizationFlowWithURL:(NSURL *)URL {
+  return [self resumeExternalUserAgentFlowWithURL:URL];
+}
+
 @end
 
 @implementation OIDAuthorizationService
+
+@synthesize configuration = _configuration;
 
 + (void)discoverServiceConfigurationForIssuer:(NSURL *)issuerURL
                                    completion:(OIDDiscoveryCallback)completion {
@@ -257,16 +274,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Authorization Endpoint
 
-+ (id<OIDExternalUserAgentSession>) presentAuthorizationRequest:(OIDAuthorizationRequest *)request
-    externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
-             callback:(OIDAuthorizationCallback)callback {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
++ (id<OIDExternalUserAgentSession, OIDAuthorizationFlowSession>)
+    presentAuthorizationRequest:(OIDAuthorizationRequest *)request
+              externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
+                       callback:(OIDAuthorizationCallback)callback {
   
   AppAuthRequestTrace(@"Authorization Request: %@", request);
   
-  OIDAuthorizationSession *flowSession = [[OIDAuthorizationSession alloc] initWithRequest:request];
+  OIDAuthorizationFlowSessionImplementation *flowSession =
+      [[OIDAuthorizationFlowSessionImplementation alloc] initWithRequest:request];
   [flowSession presentAuthorizationWithExternalUserAgent:externalUserAgent callback:callback];
   return flowSession;
 }
+
+#pragma GCC diagnostic pop
 
 #pragma mark - Token Endpoint
 

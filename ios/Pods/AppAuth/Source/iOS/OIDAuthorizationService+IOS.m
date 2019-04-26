@@ -24,9 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation OIDAuthorizationService (IOS)
 
-+ (id<OIDExternalUserAgentSession>) presentAuthorizationRequest:(OIDAuthorizationRequest *)request
-    presentingViewController:(UIViewController *)presentingViewController
-                    callback:(OIDAuthorizationCallback)callback {
++ (id<OIDExternalUserAgentSession, OIDAuthorizationFlowSession>)
+    presentAuthorizationRequest:(OIDAuthorizationRequest *)request
+       presentingViewController:(UIViewController *)presentingViewController
+                       callback:(OIDAuthorizationCallback)callback {
   OIDExternalUserAgentIOS *externalUserAgent = [[OIDExternalUserAgentIOS alloc]
       initWithPresentingViewController:presentingViewController];
   return [self presentAuthorizationRequest:request externalUserAgent:externalUserAgent callback:callback];

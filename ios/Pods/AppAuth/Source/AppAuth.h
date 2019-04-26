@@ -19,6 +19,7 @@
 #import "OIDAuthState.h"
 #import "OIDAuthStateChangeDelegate.h"
 #import "OIDAuthStateErrorDelegate.h"
+#import "OIDAuthorizationFlowSession.h"
 #import "OIDAuthorizationRequest.h"
 #import "OIDAuthorizationResponse.h"
 #import "OIDAuthorizationService.h"
@@ -56,6 +57,7 @@
 #else
 #error "Platform Undefined"
 #endif
+
 
 /*! @mainpage AppAuth for iOS and macOS
 

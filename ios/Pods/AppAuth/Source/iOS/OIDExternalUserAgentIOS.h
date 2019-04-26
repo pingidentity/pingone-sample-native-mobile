@@ -24,10 +24,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*! @brief Allows library consumers to bootstrap an @c SFSafariViewController as they see fit.
+    @remarks Useful for customizing tint colors and presentation styles.
+ */
+@protocol OIDSafariViewControllerFactory
+
+/*! @brief Creates and returns a new @c SFSafariViewController.
+    @param URL The URL which the @c SFSafariViewController should load initially.
+ */
+- (SFSafariViewController *)safariViewControllerWithURL:(NSURL *)URL;
+
+@end
+
 /*! @brief An iOS specific external user-agent that uses the best possible user-agent available
         depending on the version of iOS to present the request.
  */
 @interface OIDExternalUserAgentIOS : NSObject<OIDExternalUserAgent>
+
+/*! @brief Allows library consumers to change the @c OIDSafariViewControllerFactory used to create
+        new instances of @c SFSafariViewController.
+    @remarks Useful for customizing tint colors and presentation styles.
+    @param factory The @c OIDSafariViewControllerFactory to use for creating new instances of
+        @c SFSafariViewController.
+ */
++ (void)setSafariViewControllerFactory:(id<OIDSafariViewControllerFactory>)factory
+    __deprecated_msg("SFSafariViewController customization has been removed. If you need to "
+                     "customize the external user-agent, suggest you create your own version of "
+                     "OIDExternalUserAgentIOS and customize it as you need");
 
 /*! @internal
     @brief Unavailable. Please use @c initWithPresentingViewController:

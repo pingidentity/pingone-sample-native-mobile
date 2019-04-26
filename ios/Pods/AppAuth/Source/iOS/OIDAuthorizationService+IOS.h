@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface OIDAuthorizationService (IOS)
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 /*! @brief Perform an authorization flow using \SFSafariViewController.
     @param request The authorization request.
     @param presentingViewController The view controller from which to present the
@@ -36,9 +39,12 @@ NS_ASSUME_NONNULL_BEGIN
         receives a @c OIDExternalUserAgentSession.cancel message, or after processing a
         @c OIDExternalUserAgentSession.resumeExternalUserAgentFlowWithURL: message.
  */
-+ (id<OIDExternalUserAgentSession>) presentAuthorizationRequest:(OIDAuthorizationRequest *)request
-    presentingViewController:(UIViewController *)presentingViewController
-                    callback:(OIDAuthorizationCallback)callback;
++ (id<OIDExternalUserAgentSession, OIDAuthorizationFlowSession>)
+    presentAuthorizationRequest:(OIDAuthorizationRequest *)request
+       presentingViewController:(UIViewController *)presentingViewController
+                       callback:(OIDAuthorizationCallback)callback;
 @end
+
+#pragma GCC diagnostic pop
 
 NS_ASSUME_NONNULL_END

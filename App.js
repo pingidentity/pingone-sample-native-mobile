@@ -42,7 +42,7 @@ export default class App extends Component<{}, State> {
 
         issuer: 'https://auth.pingone.com/c2c2b4f8-c3da-4b23-abef-457ceaf25591/as',
         clientId: 'df86b400-985f-42e4-a349-bd1ab10bb625',
-        redirectUrl: 'http://localhost:8080',
+        redirectUrl: 'com.example.app:/redirect_uri_path',
         scopes: ['openid', 'profile', 'email', 'address']
       };
       const authState = await authorize(config);

@@ -1,29 +1,34 @@
-# OIDC Authentication React Native Sample Guide
+# OAuth 2.0 React Native Sample Guide
+This sample explains how applications installed on devices like phones, tablets, and computers use PingOne for Customers(P14C) OAuth 2.0 endpoints to authorize access to P14C APIs. 
+OAuth 2.0 allows users to share specific data with an application while keeping their usernames, passwords, and other information private.
+Native apps are distributed to individual devices, are classified as public clients and cannot keep secrets.
+The authorization flow for such applications is similar to the one used for web server applications, with a small difference - those apps must open the system browser and supply a local redirect URI to handle responses from the PingOne authorization server
+For more information please check [OAuth 2.0 for Native Apps specification](https://tools.ietf.org/html/rfc8252)
 
 # Prerequisites 
 1. If you don't have a React Native app, or are new to React Native, please start with [React Native's](https://facebook.github.io/react-native/docs/getting-started) documentation. It will walk you through the creation of a React Native app and other application development essentials.
 If you are developing with an Android device emulator, make sure to check out the React Native - Android Development setup instructions.
-1. Create native application to authorize against. If you are running this locally and using the defaults from React Native's documentation, your port will be 19000
+1. Create native application to authorize against. 
+**Note**: `redirectUrl` in [App.js](App.js) determines how PingOne's authorization server sends a response to your app. There are several redirect options available(i.e Custom URL Scheme or Loopback URLs), but for now PingOne supports only `http, https` schemes.
+So we have implemented a redirect page with a button, which references to a custom scheme like com.myapp://token=abcd1234.
 
-For more information please check [OAuth 2.0 for Native Apps specification](https://tools.ietf.org/html/rfc8252)
+## Setup
 
-## iOS Setup
-1. React Native App Auth depends on AppAuth-ios, so you have to configure it as a dependency. The easiest way to do that is to use CocoaPods. To install CocoaPods, run the following command:
-`sudo gem install cocoapods`
-CocoaPods manages library dependencies for this projects. The dependencies are specified in a single text file called a Podfile.
+### iOS
+1. [React Native App Auth](https://github.com/FormidableLabs/react-native-app-auth) depends on AppAuth-ios, so you have to configure it as a dependency. The easiest way to do that is to use CocoaPods. To install CocoaPods, run the following command:
+`sudo gem install cocoapods`. CocoaPods manages library dependencies for this projects. The dependencies are specified in a single text file called a Podfile.
 1. Run `pod install` from the ios directory
-1. [Install and link](https://facebook.github.io/react-native/docs/linking-libraries-ios) React native bridge for AppAuth - an SDK for communicating with OAuth2 providers:
+1. [Install and link](https://facebook.github.io/react-native/docs/linking-libraries-ios) react native [bridge for AppAuth](https://github.com/FormidableLabs/react-native-app-auth) - an SDK for communicating with OAuth2 providers:
 ```bash
-npm i react-native-app-auth@4.3.1 --save
-react-native link
+npm install react-native-app-auth --save
+react-native link react-native-app-auth
 ```
 
-**TIP**: If you see a "Command link unrecognized" error, run `npm i && react-native link`.
+**TIP**: If you see a "Command link unrecognized" error, run `npm install && react-native link`.
  
 1. Run `npm i styled-components --save`
 1. Run react-native run-ios inside your React Native project folder:
    
-   cd AwesomeProject
    react-native run-ios
 
 **TIP**: If you see a "react-native: command not found" error, run `export PATH="/usr/local/Cellar/node/<your version>/bin:$PATH"`. 
@@ -53,7 +58,8 @@ The ID Token contains the `client_id` in the ID Token's `aud` claim for the clie
 This means, just receiving an `id_token` isn't sufficient to authenticate the user; you must also validate the `id_token`'s signature and verify the claims in the token based on your app's requirements. 
 The P14C uses JSON Web Tokens (JWTs) and public key cryptography to sign tokens and verify that they're valid.
 
-# Notes
+# Tips
 1. Always open a native browser or use SFSafariViewController. You should never open an embedded web view with the OAuth prompt, since it provides no way for the user to verify the origin of the web page they’re looking at.
-1. Clearing the Cache of your React Native Project: `npm start -- --reset-cache`
+1. Clearing the Cache of your React Native Project: `watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf node_modules/ && npm cache verify && npm install && npm start -- --reset-cache`
+1. 
 
