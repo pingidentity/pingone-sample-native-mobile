@@ -22,7 +22,7 @@
 
 @implementation OIDAuthState (IOS)
 
-+ (id<OIDExternalUserAgentSession>)
++ (id<OIDExternalUserAgentSession, OIDAuthorizationFlowSession>)
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
                      presentingViewController:(UIViewController *)presentingViewController
                                      callback:(OIDAuthStateAuthorizationCallback)callback {

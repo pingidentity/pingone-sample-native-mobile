@@ -38,7 +38,12 @@ extern BOOL gOIDURLQueryComponentForceIOS7Handling;
     @see https://tools.ietf.org/html/rfc6749#appendix-B
     @see https://url.spec.whatwg.org/#urlencoded-parsing
  */
-@interface OIDURLQueryComponent : NSObject
+@interface OIDURLQueryComponent : NSObject {
+  // private variables
+  /*! @brief A dictionary of parameter names and values representing the contents of the query.
+   */
+  NSMutableDictionary<NSString *, NSMutableArray<NSString *> *> *_parameters;
+}
 
 /*! @brief The parameter names in the query.
  */

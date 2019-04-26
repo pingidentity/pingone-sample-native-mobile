@@ -1,8 +1,8 @@
-// @flow
-
-import React, { Component } from 'react';
-import { Platform } from 'react-native';
+import React from 'react';
 import styled from 'styled-components/native';
+import {
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 type Props = {
   text: string,
@@ -11,12 +11,13 @@ type Props = {
 };
 
 const ButtonBox = styled.TouchableOpacity.attrs({ activeOpacity: 0.8 })`
-  height: 50px;
+  height: ${hp('5%')}; 
   flex: 1;
-  margin: 5px;
+  margin: 3px;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.color};
+  background-color: ${props => props.color ? props.color : '#696969'};
+  borderRadius: 40;
 `;
 
 const ButtonText = styled.Text`
