@@ -1,0 +1,32 @@
+// export const config = {
+//   authDetails: {
+//     environmentId: "c2c2b4f8-c3da-4b23-abef-457ceaf25591",
+//     // responseType: "<responseType>",
+//     //logoutRedirectUri: "",
+//     clientId: "df86b400-985f-42e4-a349-bd1ab10bb625",
+//     redirectUri: "http://localhost:8080",
+//     scope: "profile address email phone"
+//   },
+//   API_URI: 'https://api.pingone.com/v1/',
+//   AUTH_URI: 'https://auth.pingone.com/'
+// };
+// export default {
+//   config
+// }
+//
+{
+  "authDetails": {
+    "environmentId": "c2c2b4f8-c3da-4b23-abef-457ceaf25591",
+    // responseType: "<responseType>",
+    //logoutRedirectUri: "",
+    "clientId": "df86b400-985f-42e4-a349-bd1ab10bb625",
+    "redirectUri": "com.example.app:/redirect_uri_path",
+    "scope": ["openid", "profile", "email", "address"],
+    "clientSecret": "GJcAfhwFxqfcbXMRi.y3tYqcjhoO28ME86vl9Gy0-Q0s.3GcEJvKPGeGq3pHOxe2",
+    //clientSecret: 'Y83JpQM7RDfOURlj96h0P16AH8Hc2o5YtxufKvsQ~ahp5._R-mSYCh_nj4~~f4Is',
+    "usePKCE": false,
+    "useNonce": false
+  },
+  "API_URI": "https://api.pingone.com/v1",
+  "AUTH_URI": "https://auth.pingone.com"
+}

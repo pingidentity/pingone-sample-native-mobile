@@ -5,3 +5,4 @@ export { default as ButtonContainer } from './ButtonContainer';
 export { default as Form } from './Form';
 export { default as Heading } from './Heading';
 export { default as Page } from './Page';
+export { default as UserInfo } from './UserInfo';

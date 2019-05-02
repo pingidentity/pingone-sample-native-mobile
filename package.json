@@ -10,7 +10,9 @@
     "react": "16.8.3",
     "react-native": "0.59.4",
     "react-native-app-auth": "^4.3.1",
-    "styled-components": "^4.2.0"
+    "react-native-table-component": "^1.2.0",
+    "styled-components": "^4.2.0",
+    "buffer": "^5.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

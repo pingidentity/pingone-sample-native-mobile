@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
-import { UIManager, LayoutAnimation } from 'react-native';
-import {authorize, refresh, revoke} from 'react-native-app-auth';
-import { Page, Button, ButtonContainer, Form, Heading } from './components';
-// import config from 'config/config'
+import React, {Component} from 'react';
+import {LayoutAnimation, UIManager, View} from 'react-native';
+import {authorize, refresh} from 'react-native-app-auth';
+import {getUserInfo, signOff} from './sdk/api'
+import {Button, ButtonContainer, Form, Heading, Page, UserInfo} from './components';
+import config from './config'
+import {Buffer} from 'buffer';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
 
-
 type State = {
-  hasLoggedInOnce: boolean,
   accessToken: ?string,
   accessTokenExpirationDate: ?string,
-  refreshToken: ?string
+  refreshToken: ?string,
+  idToken: ?string
 };
 
 export default class App extends Component<{}, State> {
 
   state = {
-    hasLoggedInOnce: false,
     accessToken: '',
     accessTokenExpirationDate: '',
-    refreshToken: ''
+    authStateParam: null,
+    refreshToken: '',
+    idToken: ''
   };
 
   animateState(nextState: $Shape<State>, delay: number = 0) {
@@ -35,23 +37,23 @@ export default class App extends Component<{}, State> {
 
   authorize = async () => {
     try {
-      const config = {
-        // issuer: config.AUTH_URI + config.authDetails.environmentId + '/as',
-        // clientId: config.authDetails.clientId,
-        // redirectUrl: config.authDetails.redirectUri
+      const authState = await authorize({
+        issuer: config.AUTH_URI + '/' + config.authDetails.environmentId
+            + '/as',
+        clientId: config.authDetails.clientId,
+        clientSecret: config.authDetails.clientSecret,
+        redirectUrl: config.authDetails.redirectUri,
+        scopes: config.authDetails.scope,
+        usePKCE: config.authDetails.usePKCE,
+        useNonce: config.authDetails.useNonce
 
-        issuer: 'https://auth.pingone.com/c2c2b4f8-c3da-4b23-abef-457ceaf25591/as',
-        clientId: 'df86b400-985f-42e4-a349-bd1ab10bb625',
-        redirectUrl: 'com.example.app:/redirect_uri_path',
-        scopes: ['openid', 'profile', 'email', 'address']
-      };
-      const authState = await authorize(config);
+      });
       this.animateState(
           {
-            hasLoggedInOnce: true,
             accessToken: authState.accessToken,
             accessTokenExpirationDate: authState.accessTokenExpirationDate,
-            refreshToken: authState.refreshToken
+            refreshToken: authState.refreshToken,
+            idToken: authState.idToken
           },
           500
       );
@@ -60,27 +62,47 @@ export default class App extends Component<{}, State> {
     }
   };
 
-  refresh = async () => {
+  getIdTokenClaims = async () => {
     try {
+      if (state.idToken) {
+        const jwtBody = state.idToken.split('.')[1];
+        const base64 = jwtBody.replace('-', '+').replace('_', '/');
+        const decodedJwt = Buffer.from(base64, 'base64');
+        state.idTokenJSON = JSON.parse(decodedJwt);
+      }
       const authState = await refresh(this.state.refreshToken, scopes);
       this.animateState({
         accessToken: authState.accessToken || this.state.accessToken,
         accessTokenExpirationDate:
-            authState.accessTokenExpirationDate || this.state.accessTokenExpirationDate,
-        refreshToken: authState.refreshToken || this.state.refreshToken
+            authState.accessTokenExpirationDate
+            || this.state.accessTokenExpirationDate,
+        refreshToken: authState.refreshToken || this.state.refreshToken,
+        idToken: authState.idToken || this.state.idToken
       });
     } catch (error) {
       console.error(error);
     }
   };
 
-  revoke = async () => {
+  getUserInfo = async () => {
     try {
-      await revoke(this.state.accessToken);
+      const userInfo = await getUserInfo(this.state.accessToken);
+      this.animateState({
+        userInfo: userInfo
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  signOff = async () => {
+    try {
+      await signOff(this.state.idToken);
       this.animateState({
         accessToken: '',
         accessTokenExpirationDate: '',
-        refreshToken: ''
+        refreshToken: '',
+        idToken: ''
       });
     } catch (error) {
       console.error(error);
@@ -89,28 +111,50 @@ export default class App extends Component<{}, State> {
 
   render() {
     const {state} = this;
+    let id_token_part = null;
+    let buttons = null;
+    let body_container = null;
+
+    if (state.accessToken) {
+      body_container = (
+            <Form>
+              <Form.Label>accessToken</Form.Label>
+              <Form.Value>{state.accessToken}</Form.Value>
+              <Form.Label>accessTokenExpirationDate</Form.Label>
+              <Form.Value>{state.accessTokenExpirationDate}</Form.Value>
+              <UserInfo accessToken={state.accessToken}/>
+            </Form>
+      );
+
+      buttons = (
+          <ButtonContainer>
+            <Button onPress={this.signOff} text="Sign Off"
+                    color="#017CC0"/>
+          </ButtonContainer>
+      )
+    } else {
+      body_container = (
+          <Heading>You are not currently authenticated. Click Sign On to get
+            started.</Heading>)
+      buttons = (
+          <ButtonContainer>
+            <Button onPress={this.authorize} text="Sign On"
+                    color="#017CC0"/>
+          </ButtonContainer>)
+    }
+
     return (
         <Page>
-          {!!state.accessToken ? (
-              <Form>
-                <Form.Label>accessToken</Form.Label>
-                <Form.Value>{state.accessToken}</Form.Value>
-                <Form.Label>accessTokenExpirationDate</Form.Label>
-                <Form.Value>{state.accessTokenExpirationDate}</Form.Value>
-                <Form.Label>refreshToken</Form.Label>
-                <Form.Value>{state.refreshToken}</Form.Value>
-              </Form>
-          ) : (
-              <Heading>{state.hasLoggedInOnce ? 'Goodbye.' : 'Hello, stranger.'}</Heading>
-          )}
-
-          <ButtonContainer>
-            {!state.accessToken && (
-                <Button onPress={this.authorize} text="Authorize" color="#017CC0"/>
-            )}
-            {!!state.refreshToken && <Button onPress={this.refresh} text="Refresh" color="#24C2CB"/>}
-            {!!state.accessToken && <Button onPress={this.revoke} text="Revoke" color="#EF525B"/>}
-          </ButtonContainer>
+          {body_container}
+          {buttons}
+          {/*{!state.accessToken && (*/}
+          {/*<Button onPress={this.authorize} text="Sign On"*/}
+          {/*color="#017CC0"/>*/}
+          {/*)}*/}
+          {/*{!!state.refreshToken && <Button onPress={this.refresh}*/}
+          {/*text="Refresh" color="#24C2CB"/>}*/}
+          {/*{!!state.accessToken && <Button onPress={this.revoke} text="Revoke"*/}
+          {/*color="#EF525B"/>}*/}
         </Page>
     );
   }
