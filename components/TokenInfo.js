@@ -30,9 +30,7 @@ class TokenInfo extends React.Component {
     const base64 = jwtBody.replace('-', '+').replace('_', '/');
     const decodedJwt = Buffer.from(base64, 'base64');
 
-    this.props.dataHandler({idToken: {
-      body: JSON.parse(decodedJwt),
-      title: 'Token Information'}})
+    this.props.dataHandler({idToken: {body: JSON.parse(decodedJwt)}})
 
     this.setState({
       idTokenJSON: JSON.parse(decodedJwt)

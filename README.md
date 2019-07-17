@@ -26,12 +26,11 @@ If you are developing with an Android device emulator, make sure to check out th
 
 To demonstrate OAuth2/OIDC implementation we have used React Native bridge for [AppAuth](https://appauth.io/) - the [React Native App Auth SDK](https://github.com/FormidableLabs/react-native-app-auth)
 
-1. [Install and link](https://facebook.github.io/react-native/docs/linking-libraries-ios) react native [bridge for AppAuth](https://github.com/FormidableLabs/react-native-app-auth):
+1. [Link](https://facebook.github.io/react-native/docs/linking-libraries-ios) the native parts of react native [bridge for AppAuth](https://github.com/FormidableLabs/react-native-app-auth) library for the platforms we are using :
     ```bash 
-    npm install react-native-app-auth --save
     react-native link react-native-app-auth
     ``` 
-
+    
 1. Adjust [config.js](config.js) with your application configuration data, where
 - `ENVIRONMENT_ID`: *Required*. Your application's Environment ID. 
 

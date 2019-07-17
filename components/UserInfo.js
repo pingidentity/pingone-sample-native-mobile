@@ -12,8 +12,7 @@ class UserInfo extends React.Component {
     this.state = {
       spinner: false,
       userInfo: null,
-      errorMessage: '',
-      tableHead: ['Claim', 'Claim Value']
+      errorMessage: ''
     };
 
     this.showUserInfo = this.showUserInfo.bind(this);
@@ -29,16 +28,16 @@ class UserInfo extends React.Component {
   }
 
   showUserInfo(event) {
-    this.props.dataHandler({userInfo: {
-        isLoading: true,
-        title: 'User Information'}})
+    this.props.dataHandler({userInfo: {isLoading: true}})
 
     getUserInfo(this.props.accessToken)
-    .then(userData =>{
-      this.props.dataHandler({userInfo: {
-        body: userData,
-        title: 'User Information',
-          isLoading: false}})
+    .then(userData => {
+      this.props.dataHandler({
+        userInfo: {
+          body: userData,
+          isLoading: false
+        }
+      })
 
       this.setState({
         userInfo: userData
