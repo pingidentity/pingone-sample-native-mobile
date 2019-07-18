@@ -109,6 +109,7 @@ android {
 		1. Then go to File > Project Settings …
 		1. Change the Build System to Legacy Build System in Per-User Project Settings.
 1. If you have installed simulators for different iOS versions and you want to run the app in an specific one use : `react-native run-ios --simulator "iPhone 6s (9.3)"`
+1. `Cells` in `Col` and `Cols` components do not support adaptive height in `react-native-table-component`
 
 # Issues
 1. Add support [PKCE](https://tools.ietf.org/html/rfc7636) (Proof Key for Code Exchange) and remove `clientSecret` parameter usage, since static client secrets can be easily extracted from apps and allow others to impersonate the app and steal user data. 

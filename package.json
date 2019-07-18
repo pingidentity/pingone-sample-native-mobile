@@ -16,7 +16,8 @@
     "react-native-responsive-screen": "^1.2.2",
     "react-native-table-component": "^1.2.0",
     "react-native-webview": "^5.12.1",
-    "styled-components": "^4.2.0"
+    "styled-components": "^4.2.0",
+    "ws": ">=3.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -24,7 +25,8 @@
     "babel-jest": "^24.7.1",
     "jest": "^24.7.1",
     "metro-react-native-babel-preset": "^0.53.1",
-    "react-test-renderer": "16.8.3"
+    "react-test-renderer": "16.8.3",
+    "ws": ">=3.3.1"
   },
   "jest": {
     "preset": "react-native"

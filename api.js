@@ -4,7 +4,7 @@
  * Contains functions that correspond to steps needed to make it through a PingOne authentication flow.
  * Each function corresponds with an action the UI needs to take and call function(s) from actions.js
  */
-import {API_URI,AUTH_URI, ENVIRONMENT_ID} from "./config";
+import {API_URI,AUTH_URI, ENVIRONMENT_ID} from './config';
 
 /******************************************************************************
  *         OAuth 2/OpenID Connect Protocol API
@@ -31,7 +31,7 @@ export const getUserInfo = (access_token) => {
   return fetch(
       `${getBaseApiUrl(true)}/${ENVIRONMENT_ID}/as/userinfo`,
       {
-        method: "POST",
+        method: 'POST',
         headers: new Headers({
           'Authorization': 'Bearer ' + access_token,
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -40,6 +40,21 @@ export const getUserInfo = (access_token) => {
   .then(handleResponse);
 };
 
+
+export const flatten = (objectOrArray, prefix = '', formatter = (k) => (k)) => {
+  const nestedFormatter = (k) => ('_' + k)
+  const nestElement = (prev, value, key) => (
+      (value && typeof value === 'object')
+          ? { ...prev, ...flatten(value, `${prefix}${formatter(key)}`, nestedFormatter) }
+          : { ...prev, ...{ [`${prefix}${formatter(key)}`]: value } });
+
+  return Array.isArray(objectOrArray)
+      ? objectOrArray.reduce(nestElement, {})
+      : Object.keys(objectOrArray).reduce(
+          (prev, element) => nestElement(prev, objectOrArray[element], element),
+          {},
+      );
+};
 /**
  * Handle all fetch response's
  *
@@ -124,7 +139,15 @@ export const CLAIMS_DESCRIPTION_MAPPING = {
   acr: 'Authentication Context Class Reference value that identifies the Authentication Context Class that the authentication performed satisfied.',
   auth_time: 'Time when the End-User authentication occurred.',
   exp: 'Expiration time on or after which the ID Token MUST NOT be accepted for processing. ',
-  iat: 'Time at which the JWT was issued.'
+  iat: 'Time at which the JWT was issued.',
+  address_country: 'Country name.',
+  address_postal_code: 'Zip code or postal code. ',
+  address_region: 'State, province, prefecture, or region. ',
+  address_locality: 'City or locality. ',
+  address_formatted: 'Full mailing address, formatted for display or use on a mailing label. This field MAY contain multiple lines, separated by newlines. Newlines can be represented either as a carriage return/line feed pair (\'\\r\\n\') or as a single line feed character (\'\\n\').',
+  address_street_address: 'Full street address component, which MAY include house number, street name, Post Office Box, and multi-line extended street address information. '
+      + 'This field MAY contain multiple lines, separated by newlines. Newlines can be represented either as a carriage return/line feed pair (\'\\r\\n\') or as a single line feed character (\'\\n\').'
+
 };
 
 export const CLAIMS_MAPPING = {
@@ -145,5 +168,12 @@ export const CLAIMS_MAPPING = {
   acr: 'Authentication Context Class Reference.',
   auth_time: 'User authentication time.',
   exp: 'ID Toke expiration time.',
-  iat: 'Time at which the JWT was issued.'
+  iat: 'Time at which the JWT was issued.',
+  address_country: 'Country name. ',
+  address_postal_code: 'Zip code or postal code. ',
+  address_region: 'State, province, prefecture, or region. ',
+  address_locality: 'City or locality. ',
+  address_formatted: 'Full mailing address. ',
+  address_street_address: 'Full street address. '
+
 };
