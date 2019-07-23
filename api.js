@@ -146,7 +146,8 @@ export const CLAIMS_DESCRIPTION_MAPPING = {
   address_locality: 'City or locality. ',
   address_formatted: 'Full mailing address, formatted for display or use on a mailing label. This field MAY contain multiple lines, separated by newlines. Newlines can be represented either as a carriage return/line feed pair (\'\\r\\n\') or as a single line feed character (\'\\n\').',
   address_street_address: 'Full street address component, which MAY include house number, street name, Post Office Box, and multi-line extended street address information. '
-      + 'This field MAY contain multiple lines, separated by newlines. Newlines can be represented either as a carriage return/line feed pair (\'\\r\\n\') or as a single line feed character (\'\\n\').'
+      + 'This field MAY contain multiple lines, separated by newlines. Newlines can be represented either as a carriage return/line feed pair (\'\\r\\n\') or as a single line feed character (\'\\n\').',
+      amr_0: 'Authentication methods. '
 
 };
 
@@ -174,6 +175,7 @@ export const CLAIMS_MAPPING = {
   address_region: 'State, province, prefecture, or region. ',
   address_locality: 'City or locality. ',
   address_formatted: 'Full mailing address. ',
-  address_street_address: 'Full street address. '
+  address_street_address: 'Full street address. ',
+  amr_0: 'Authentication methods. '
 
 };
