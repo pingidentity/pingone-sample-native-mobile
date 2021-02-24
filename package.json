@@ -15,7 +15,7 @@
     "react-native-app-auth": "^4.4.0",
     "react-native-responsive-screen": "^1.2.2",
     "react-native-table-component": "^1.2.0",
-    "react-native-webview": "^5.12.1",
+    "react-native-webview": "^11.0.0",
     "styled-components": "^4.2.0",
     "ws": ">=3.3.1"
   },
