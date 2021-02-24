@@ -9,7 +9,7 @@ export const AUTH_CONFIG = {
   clientSecret: '<clientSecret>',
   redirectUrl: 'com.example.app:/redirect_uri_path',
   scopes: ["openid", "profile", "email", "address"],
-  usePKCE: false,
+  usePKCE: true,
   useNonce: true,
   additionalParameters: {
     max_age: '3600',

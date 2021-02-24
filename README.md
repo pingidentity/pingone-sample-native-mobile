@@ -41,8 +41,9 @@ To demonstrate OAuth2/OIDC implementation we have used React Native bridge for [
 - `clientSecret`: *Required*. Your application's secret.
 - `redirectUrl`: *Required*. Determines how PingOne's authorization server sends a response to your app. Is equal to a custom URL scheme `com.example.app:/redirect_uri_path`
 - `scopes`: *Required*.  String identifiers understood by both the authorization server and the resource server to represent the specific boundaries of access (i.e `email, address, profile, phone`).
+- `usePKCE`: *Optional*. Default: true. Allows not sending the `code_challenge` parameter and skipping PKCE code verification.
 - `additionalParameters- > max_age`: *Optional*. A string that specifies the maximum amount of time allowed since the user last authenticated. If the max_age value is exceeded, the user must re-authenticate.
-- `additionalParameters- > prompt`: *Optional*.  A string that specifies whether the user is prompted to login for re-authentication. The prompt parameter can be used as a way to check for existing authentication, verifying that the user is still present for the current session. 
+- `additionalParameters- > prompt`: *Optional*.  A string that specifies whether the user is prompted to login for re-authentication. The prompt parameter can be used as a way to check for existing authentication, verifying that the user is still present for the current session.
   - For `prompt=none`, the user is never prompted to login to re-authenticate, which can result in an error if authentication is required. 
   - For `prompt=login`, if time since last login is greater than the max-age, then the current session is stashed away in the flow state and treated in the flow as if there was no previous existing session. 
   
@@ -110,6 +111,3 @@ android {
 		1. Change the Build System to Legacy Build System in Per-User Project Settings.
 1. If you have installed simulators for different iOS versions and you want to run the app in an specific one use : `react-native run-ios --simulator "iPhone 6s (9.3)"`
 1. `Cells` in `Col` and `Cols` components do not support adaptive height in `react-native-table-component`
-
-# Issues
-1. Add support [PKCE](https://tools.ietf.org/html/rfc7636) (Proof Key for Code Exchange) and remove `clientSecret` parameter usage, since static client secrets can be easily extracted from apps and allow others to impersonate the app and steal user data. 
