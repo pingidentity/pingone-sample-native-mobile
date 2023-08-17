@@ -1,3 +1,5 @@
+# Deprecated
+
 # OIDC/OAuth 2.0 React Native Sample Guide
 This sample demonstrate how applications, installed on devices like phones, tablets, and computers, can trigger PingOne for Customers(P14C) OAuth 2.0 endpoints to authenticate and authorize access to P14C APIs. 
 
